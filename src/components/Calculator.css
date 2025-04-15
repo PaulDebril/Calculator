@@ -31,13 +31,16 @@
   .calculator-buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 15px;
   }
   
   .calc-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #303136;
     color: #2dbd54;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     border: none;
     outline: none;
     border-radius: 8px;
@@ -59,14 +62,17 @@
   .calc-btn:hover {
     background-color: #333333; 
   }
+
   
   .zero-btn {
     grid-column: span 2;
   }
 
-  .plus-btn {
+  .plus-btn,
+  .equal-btn {
     grid-row: span 2;
   }
+
   
   @media screen and (max-width: 400px) {
     .calculator-container {

@@ -1,5 +1,7 @@
 import React from 'react';
 import './Calculator.css';
+import { LuAsterisk } from "react-icons/lu";
+import { FiDelete } from "react-icons/fi";
 
 const Calculator: React.FC = () => {
   return (
@@ -11,9 +13,9 @@ const Calculator: React.FC = () => {
       <div className="calculator-buttons">
         {/* Ligne 1 */}
         <button className="calc-btn delete-btn">C</button>
-        <button className="calc-btn delete-btn">Del</button>
+        <button className="calc-btn delete-btn"><FiDelete /></button>
         <button className="calc-btn operator-btn">/</button>
-        <button className="calc-btn operator-btn">*</button>
+        <button className="calc-btn operator-btn"><LuAsterisk /></button>
 
         {/* Ligne 2 */}
         <button className="calc-btn">7</button>
@@ -31,7 +33,7 @@ const Calculator: React.FC = () => {
         <button className="calc-btn">1</button>
         <button className="calc-btn">2</button>
         <button className="calc-btn">3</button>
-        <button className="calc-btn operator-btn">=</button>
+        <button className="calc-btn operator-btn equal-btn">=</button>
 
         {/* Ligne 5 */}
         <button className="calc-btn zero-btn">0</button>
