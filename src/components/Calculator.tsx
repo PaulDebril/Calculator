@@ -1,24 +1,52 @@
 import React, { useState } from 'react';
 import './Calculator.css';
-import { LuAsterisk } from "react-icons/lu";
-import { FiDelete } from "react-icons/fi";
+import { LuAsterisk } from 'react-icons/lu';
+import { FiDelete } from 'react-icons/fi';
 import { add, subtract, multiply, divide } from '../utils/calculator';
 
 const Calculator: React.FC = () => {
   const [expression, setExpression] = useState('');
+  const [prevExpression, setPrevExpression] = useState('');
   const [result, setResult] = useState<string | number>('');
+  const [isCalculated, setIsCalculated] = useState(false);
 
   const handleButtonClick = (value: string) => {
+    if (isCalculated) {
+      if (/[-+*/]/.test(value)) {
+        setExpression(() => String(result) + value);
+        setResult('');
+        setIsCalculated(false);
+      } else {
+        setExpression(value);
+        setResult('');
+        setIsCalculated(false);
+      }
+      return;
+    }
+
+    const lastTwo = expression.slice(-2);
+    if (/[-+*/]$/.test(expression) && /[-+*/]/.test(value)) {
+      if (!(value === '-' && !/[-+*/]-$/.test(lastTwo))) return;
+    }
+
     setExpression(prev => prev + value);
   };
 
-  const clear = () => {
+  const clearAll = () => {
     setExpression('');
+    setPrevExpression('');
     setResult('');
+    setIsCalculated(false);
   };
 
   const deleteLast = () => {
-    setExpression(prev => prev.slice(0, -1));
+    if (isCalculated) {
+      setExpression(prevExpression);
+      setResult('');
+      setIsCalculated(false);
+    } else {
+      setExpression(prev => prev.slice(0, -1));
+    }
   };
 
   const calculate = () => {
@@ -26,47 +54,46 @@ const Calculator: React.FC = () => {
       const match = expression.match(/(-?\d+\.?\d*)([+\-*/])(-?\d+\.?\d*)/);
       if (!match) {
         setResult('Erreur');
+        setIsCalculated(true);
         return;
       }
-
       const [, left, operator, right] = match;
       const a = parseFloat(left);
       const b = parseFloat(right);
+      let res: number | string;
 
-      let res;
       switch (operator) {
-        case '+':
-          res = add(a, b);
-          break;
-        case '-':
-          res = subtract(a, b);
-          break;
-        case '*':
-          res = multiply(a, b);
-          break;
-        case '/':
-          res = divide(a, b);
-          break;
-        default:
-          res = 'Erreur';
+        case '+': res = add(a, b); break;
+        case '-': res = subtract(a, b); break;
+        case '*': res = multiply(a, b); break;
+        case '/': res = b === 0 ? '∞' : divide(a, b); break;
+        default: res = 'Erreur';
       }
 
+      setPrevExpression(expression);
       setResult(res);
-    } catch (err: any) {
-      setResult(err.message);
+      setIsCalculated(true);
+    } catch {
+      setResult('Erreur');
+      setIsCalculated(true);
     }
   };
 
   return (
     <div className="calculator-container">
       <div className="calculator-display">
-        <span className="display-value">
-          {expression} {result !== '' ? `= ${result}` : ''}
-        </span>
+        {result === '' ? (
+          <span className="display-input">{expression || '0'}</span>
+        ) : (
+          <>
+            <div className="display-expression">{prevExpression}</div>
+            <div className="display-result">{result}</div>
+          </>
+        )}
       </div>
 
       <div className="calculator-buttons">
-        <button className="calc-btn delete-btn" onClick={clear}>C</button>
+        <button className="calc-btn delete-btn" onClick={clearAll}>C</button>
         <button className="calc-btn delete-btn" onClick={deleteLast}><FiDelete /></button>
         <button className="calc-btn operator-btn" onClick={() => handleButtonClick('/')}>/</button>
         <button className="calc-btn operator-btn" onClick={() => handleButtonClick('*')}><LuAsterisk /></button>

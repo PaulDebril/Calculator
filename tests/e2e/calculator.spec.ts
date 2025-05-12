@@ -5,37 +5,67 @@ test.describe('Calculator - End to End', () => {
     await page.goto('/');
   });
 
-  test('should handle clear and delete properly', async ({ page }) => {
-    await page.getByText('9').click();
-    await page.getByText('8').click();
-    await page.getByText('7').click();
-    await expect(page.locator('.display-value')).toHaveText('987');
+  test('devrait faire (5 + 3) * 2 - 4 / 2 = 14', async ({ page }) => {
+    await page.getByRole('button', { name: '5' }).click();
+    await page.getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: '3' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('8');
 
-    await page.getByRole('button').filter({ hasText: /^$/ }).first().click();
-    await expect(page.locator('.display-value')).toHaveText('98');
+    await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
+    await page.getByRole('button', { name: '2' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('16');
 
-    await page.getByRole('button', { name: /^c$/i }).click();
-    await expect(page.locator('.display-value')).toHaveText('');
+    await page.getByRole('button', { name: '-' }).click();
+    await page.getByRole('button', { name: '4' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('12');
 
-    await page.getByText('7').click();
-    await page.getByText('6').click();
-    await page.getByText('9').click();
-    await page.getByText('/').click();
-    await page.getByText('3').click();
-    await page.getByText('2').click();
-    await page.getByText('=').click();
-    await expect(page.locator('.display-value')).toHaveText('769/32 = 24.03125');
-
-    await page.getByRole('button', { name: /^c$/i }).click();
-    await expect(page.locator('.display-value')).toHaveText('');
+    await page.getByRole('button', { name: '/' }).click();
+    await page.getByRole('button', { name: '2' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-expression')).toHaveText('12/2');
+    await expect(page.locator('.display-result')).toHaveText('6');
   });
 
-  test('should handle division by zero', async ({ page }) => {
-    await page.getByText('5').click();
-    await page.getByText('/').click();
-    await page.getByText('0').click();
-    await page.getByText('=').click();
+  test('devrait enchaîner 1+2-3*4/2 = -4', async ({ page }) => {
+    await page.getByRole('button', { name: '1' }).click();
+    await page.getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: '2' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('3');
 
-    await expect(page.locator('.display-value')).toContainText('Division par zéro');
+    await page.getByRole('button', { name: '-' }).click();
+    await page.getByRole('button', { name: '3' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('0');
+
+    await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
+    await page.getByRole('button', { name: '4' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('0');
+
+    await page.getByRole('button', { name: '/' }).click();
+    await page.getByRole('button', { name: '2' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-expression')).toHaveText('0/2');
+    await expect(page.locator('.display-result')).toHaveText('0');
+  });
+
+  test('devrait réinitialiser puis calculer 7*3 = 21', async ({ page }) => {
+    await page.getByRole('button', { name: '9' }).click();
+    await page.getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: '1' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-result')).toHaveText('10');
+    await page.getByRole('button', { name: 'C' }).click();
+    await expect(page.locator('.display-input')).toHaveText('0');
+    await page.getByRole('button', { name: '7' }).click();
+    await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
+    await page.getByRole('button', { name: '3' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+    await expect(page.locator('.display-expression')).toHaveText('7*3');
+    await expect(page.locator('.display-result')).toHaveText('21');
   });
 });
