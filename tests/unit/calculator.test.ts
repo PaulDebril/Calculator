@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { add, subtract, multiply, divide } from '../utils/calculator';
+import { add, subtract, multiply, divide } from '../../src/utils/calculator';
 
 describe('Addition', () => {
   it('additionne deux entiers positifs', () => {
