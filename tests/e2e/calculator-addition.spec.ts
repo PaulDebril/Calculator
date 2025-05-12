@@ -15,6 +15,18 @@ test.describe('Calculator - Addition', () => {
     await expect(page.locator('.display-result')).toHaveText('2');
   });
 
+  test('addition de 3 chiffres simples', async ({ page }) => {
+    await page.getByRole('button', { name: '1' }).click();
+    await page.getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: '1' }).click();
+    await page.getByRole('button', { name: '+' }).click();
+    await page.getByRole('button', { name: '1' }).click();
+    await page.getByRole('button', { name: '=' }).click();
+
+    await expect(page.locator('.display-expression')).toHaveText('1+1+1');
+    await expect(page.locator('.display-result')).toHaveText('3');
+  });
+
   test('addition de nombres multi-chiffres', async ({ page }) => {
     await page.getByRole('button', { name: '1' }).click();
     await page.getByRole('button', { name: '2' }).click();

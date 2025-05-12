@@ -89,6 +89,6 @@ test.describe('Calculator - Division', () => {
     await expect(page.locator('.display-result')).toHaveText('2');
 
     await page.getByRole('button').filter({ hasText: /^$/ }).first().click();
-    await expect(page.getByText('8/4', { exact: true })).toBeVisible();
+    await expect(page.locator('div').filter({ hasText: /^8\/4$/ }).first()).toBeVisible();
   });
 });

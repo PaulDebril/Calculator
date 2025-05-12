@@ -91,3 +91,115 @@
     max-width: 300px;
   }
 }
+
+.calculator-history {
+  width: 300px;
+  max-height: calc(60vh - 40px);
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #17181a;
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+
+.calculator-history h3 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.calculator-history ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.history-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(45, 189, 83, 0.05);
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.history-entry:hover {
+  background: rgba(45, 189, 84, 0.2);
+  transform: translateX(5px);
+}
+
+.hist-expr {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #ddd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+.hist-result {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2dbd54;
+  flex-shrink: 0;
+}
+
+.calculator-history::-webkit-scrollbar {
+  width: 6px;
+}
+
+.calculator-history::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.calculator-history::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.calculator-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.calculator-container,
+.calculator-history {
+  width: 300px;
+  height: 60vh;
+  margin-top: 0;
+}
+
+.calculator-history {
+  max-height: 100%;
+  padding: 20px;
+  background-color: #17181a;
+  position: relative;
+
+}
+
+.clear-history-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #bbbbbb;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+
+.clear-history-btn:hover {
+  color: #ff6060;
+}

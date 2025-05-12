@@ -46,14 +46,11 @@ test.describe('Calculator - Soustraction', () => {
   });
 
   test('chaînage après calcul (= puis - 1)', async ({ page }) => {
-    // 5 - 2 = 3
     await page.getByRole('button', { name: '5' }).click();
     await page.getByRole('button', { name: '-' }).click();
     await page.getByRole('button', { name: '2' }).click();
     await page.getByRole('button', { name: '=' }).click();
     await expect(page.locator('.display-result')).toHaveText('3');
-
-    // continuer avec - 1 = 2
     await page.getByRole('button', { name: '-' }).click();
     await page.getByRole('button', { name: '1' }).click();
     await page.getByRole('button', { name: '=' }).click();
@@ -67,9 +64,7 @@ test.describe('Calculator - Soustraction', () => {
     await page.getByRole('button', { name: '4' }).click();
     await page.getByRole('button', { name: '=' }).click();
     await expect(page.locator('.display-result')).toHaveText('5');
-
-    // suppression : on revient à "9-4"
     await page.getByRole('button').filter({ hasText: /^$/ }).first().click();
-    await expect(page.getByText('9-4', { exact: true })).toBeVisible();
+    await expect(page.locator('div').filter({ hasText: /^9-4$/ }).first()).toBeVisible();
   });
 });

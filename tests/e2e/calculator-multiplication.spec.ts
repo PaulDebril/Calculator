@@ -87,6 +87,6 @@ test.describe('Calculator - Multiplication', () => {
     await expect(page.locator('.display-result')).toHaveText('48');
 
     await page.getByRole('button').filter({ hasText: /^$/ }).first().click();
-    await expect(page.getByText('8*6', { exact: true })).toBeVisible();
+    await expect(page.locator('div').filter({ hasText: /^8\*6$/ }).first()).toBeVisible();
   });
 });
