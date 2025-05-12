@@ -1,43 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Calculator.css';
 import { LuAsterisk } from "react-icons/lu";
 import { FiDelete } from "react-icons/fi";
+import { add, subtract, multiply, divide } from '../utils/calculator';
 
 const Calculator: React.FC = () => {
+  const [expression, setExpression] = useState('');
+  const [result, setResult] = useState<string | number>('');
+
+  const handleButtonClick = (value: string) => {
+    setExpression(prev => prev + value);
+  };
+
+  const clear = () => {
+    setExpression('');
+    setResult('');
+  };
+
+  const deleteLast = () => {
+    setExpression(prev => prev.slice(0, -1));
+  };
+
+  const calculate = () => {
+    try {
+      const match = expression.match(/(-?\d+\.?\d*)([+\-*/])(-?\d+\.?\d*)/);
+      if (!match) {
+        setResult('Erreur');
+        return;
+      }
+
+      const [, left, operator, right] = match;
+      const a = parseFloat(left);
+      const b = parseFloat(right);
+
+      let res;
+      switch (operator) {
+        case '+':
+          res = add(a, b);
+          break;
+        case '-':
+          res = subtract(a, b);
+          break;
+        case '*':
+          res = multiply(a, b);
+          break;
+        case '/':
+          res = divide(a, b);
+          break;
+        default:
+          res = 'Erreur';
+      }
+
+      setResult(res);
+    } catch (err: any) {
+      setResult(err.message);
+    }
+  };
+
   return (
     <div className="calculator-container">
       <div className="calculator-display">
-        <span className="display-value">4,840 + 120 / 30 = 4,844</span>
+        <span className="display-value">
+          {expression} {result !== '' ? `= ${result}` : ''}
+        </span>
       </div>
 
       <div className="calculator-buttons">
-        {/* Ligne 1 */}
-        <button className="calc-btn delete-btn">C</button>
-        <button className="calc-btn delete-btn"><FiDelete /></button>
-        <button className="calc-btn operator-btn">/</button>
-        <button className="calc-btn operator-btn"><LuAsterisk /></button>
+        <button className="calc-btn delete-btn" onClick={clear}>C</button>
+        <button className="calc-btn delete-btn" onClick={deleteLast}><FiDelete /></button>
+        <button className="calc-btn operator-btn" onClick={() => handleButtonClick('/')}>/</button>
+        <button className="calc-btn operator-btn" onClick={() => handleButtonClick('*')}><LuAsterisk /></button>
 
-        {/* Ligne 2 */}
-        <button className="calc-btn">7</button>
-        <button className="calc-btn">8</button>
-        <button className="calc-btn">9</button>
-        <button className="calc-btn operator-btn">-</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('7')}>7</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('8')}>8</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('9')}>9</button>
+        <button className="calc-btn operator-btn" onClick={() => handleButtonClick('-')}>-</button>
 
-        {/* Ligne 3 */}
-        <button className="calc-btn">4</button>
-        <button className="calc-btn">5</button>
-        <button className="calc-btn">6</button>
-        <button className="calc-btn operator-btn">+</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('4')}>4</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('5')}>5</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('6')}>6</button>
+        <button className="calc-btn operator-btn" onClick={() => handleButtonClick('+')}>+</button>
 
-        {/* Ligne 4 */}
-        <button className="calc-btn">1</button>
-        <button className="calc-btn">2</button>
-        <button className="calc-btn">3</button>
-        <button className="calc-btn operator-btn equal-btn">=</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('1')}>1</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('2')}>2</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('3')}>3</button>
+        <button className="calc-btn operator-btn equal-btn" onClick={calculate}>=</button>
 
-        {/* Ligne 5 */}
-        <button className="calc-btn zero-btn">0</button>
-        <button className="calc-btn">.</button>
+        <button className="calc-btn zero-btn" onClick={() => handleButtonClick('0')}>0</button>
+        <button className="calc-btn" onClick={() => handleButtonClick('.')}>.</button>
       </div>
     </div>
   );
