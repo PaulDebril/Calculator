@@ -4,5 +4,5 @@ services:
   react-app:
     build: .
     ports:
-      - "3000:80" # 3000 côté hôte → 80 dans le conteneur
+      - "3001:80" # 3000 côté hôte → 80 dans le conteneur
     restart: unless-stopped

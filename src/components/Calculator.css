@@ -126,7 +126,9 @@
   padding: 10px;
   margin-bottom: 8px;
   border-radius: 8px;
-  transition: background 0.2s, transform 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.2s;
   cursor: pointer;
 }
 
@@ -185,7 +187,6 @@
   padding: 20px;
   background-color: #17181a;
   position: relative;
-
 }
 
 .clear-history-btn {
