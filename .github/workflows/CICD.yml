@@ -16,61 +16,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout du code
-      uses: actions/checkout@v3
+      - name: Checkout du code
+        uses: actions/checkout@v3
 
-    - name: Installer Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      - name: Installer Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
 
-    - name: Installer les dépendances
-      run: npm install
+      - name: Installer les dépendances
+        run: npm install
 
-    - name: Vérification Prettier
-      run: npm run format:check
+      - name: Vérification Prettier
+        run: npm run format:check
 
-    - name: Vérification ESLint
-      run: npm run lint
+      - name: Vérification ESLint
+        run: npm run lint
 
   deploy:
     name: Déploiement sur VPS
     runs-on: ubuntu-latest
-    needs: ci-checks 
+    needs: ci-checks
     if: github.event.pull_request.merged == true || github.event_name == 'push'
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Connexion SSH et déploiement
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
+      - name: Connexion SSH et déploiement
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
             echo "➡️ Début du script sur le VPS"
             echo "📂 Répertoire courant :"
             pwd
-          
+
             echo "👤 Utilisateur courant :"
             whoami
-          
+
             echo "📁 Contenu du dossier home :"
             ls -la ~
-          
+
             echo "📁 Contenu de /home/pauldebril/apps/Calculator :"
             ls -la /home/pauldebril/apps/Calculator
-          
+
             echo "🚀 Lancement du pull Git"
             cd /home/pauldebril/apps/Calculator
             git pull origin main --rebase
-          
+
             echo "🐳 Docker Compose Down"
             docker compose down
-          
+
             echo "📦 Docker Compose Build + Up"
             docker compose up -d --build
-
