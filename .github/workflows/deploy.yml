@@ -3,11 +3,11 @@ name: Déploiement CI/CD sur VPS
 on:
   push:
     branches:
-      - testdeploy
+      - main
   pull_request:
     types: [closed]
     branches:
-      - testdeploy
+      - main
 
 jobs:
   deploy:
