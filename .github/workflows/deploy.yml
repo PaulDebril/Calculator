@@ -1,0 +1,32 @@
+name: Déploiement CI/CD sur VPS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Déployer Calculator sur VPS
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Récupération du code
+      uses: actions/checkout@v3
+
+    - name: Connexion SSH et déploiement
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/pauldebril/apps/Calculator
+          git pull origin main
+          docker-compose down
+          docker-compose up -d --build
