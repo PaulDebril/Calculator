@@ -3,11 +3,11 @@ name: Déploiement CI/CD sur VPS
 on:
   push:
     branches:
-      - main
+      - testdeploy
   pull_request:
     types: [closed]
     branches:
-      - main
+      - testdeploy
 
 jobs:
   deploy:
@@ -26,7 +26,25 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /home/pauldebril/apps/Calculator
-          git pull origin main --rebase
-          docker-compose down
-          docker-compose up -d --build
+            echo "➡️ Début du script sur le VPS"
+            echo "📂 Répertoire courant :"
+            pwd
+          
+            echo "👤 Utilisateur courant :"
+            whoami
+          
+            echo "📁 Contenu du dossier home :"
+            ls -la ~
+          
+            echo "📁 Contenu de /home/pauldebril/apps/Calculator :"
+            ls -la /home/pauldebril/apps/Calculator
+          
+            echo "🚀 Lancement du pull Git"
+            cd /home/pauldebril/apps/Calculator
+            git pull origin main --rebase
+          
+            echo "🐳 Docker Compose Down"
+            docker compose down
+          
+            echo "📦 Docker Compose Build + Up"
+            docker compose up -d --build
